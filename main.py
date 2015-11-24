@@ -3,5 +3,11 @@ import zmq
 
 context = zmq.Context()
 
-kinect_conn = context.socket(zmq.PULL)
-kinect_conn.connect("tcp://127.0.0.1:9999")
+status_con = context.socket(zmq.PULL)
+status_con.connect("tcp://127.0.0.1:9001")
+
+controller_con = context.socket(zmq.PUSH)
+controller_con.connect("tcp://127.0.0.1:9002")
+
+class CrazyTrajectory(Thread):
+    
