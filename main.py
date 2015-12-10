@@ -86,5 +86,6 @@ class CrazyTrajectory(Thread):
     def stop(self):
         self.running = False
 
-trajectory = CrazyTrajectory()
-trajectory.start()
+if __name__ == '__main__':
+    trajectory = CrazyTrajectory()
+    trajectory.start()

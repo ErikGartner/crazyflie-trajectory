@@ -1,7 +1,9 @@
 # crazyflie-trajectory
 *Trajectory generation using for the Crazyflie*
 
-It connects to the crazyflie AR solution using zmq to get postion and issue set-point commands.
+[ ![Codeship Status for ErikGartner/crazyflie-trajectory](https://codeship.com/projects/7f48d0d0-8174-0133-e84e-7e8a3f8de088/status?branch=master)](https://codeship.com/projects/121231)
+
+A trajectory generator that connects to the CrazyFlie AR solution by Bitcraze using zmq to get postion and issue set-point commands.
 
 ## Usage
 ```python3 main.py```
