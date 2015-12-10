@@ -2,6 +2,7 @@
 *Trajectory generation using for the Crazyflie*
 
 [ ![Codeship Status for ErikGartner/crazyflie-trajectory](https://codeship.com/projects/7f48d0d0-8174-0133-e84e-7e8a3f8de088/status?branch=master)](https://codeship.com/projects/121231)
+[![Code Climate](https://codeclimate.com/github/ErikGartner/crazyflie-trajectory/badges/gpa.svg)](https://codeclimate.com/github/ErikGartner/crazyflie-trajectory)
 
 A trajectory generator that connects to the CrazyFlie AR solution by Bitcraze using zmq to get postion and issue set-point commands.
 
