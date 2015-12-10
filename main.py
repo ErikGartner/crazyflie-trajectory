@@ -4,17 +4,14 @@ from threading import Thread
 from scipy import interpolate
 from numpy import linspace
 
-
 COPTER_ID = 1
 LZ_ID = 2
 ABOUT_TRHESHOLD = 0.1
 HEIGHT = 0.5
 SET_POINTS = 10
-    
+
+
 class CrazyTrajectory(Thread):
-
-
-
 
     def __init__(self):
         Thread.__init__(self)
@@ -39,8 +36,8 @@ class CrazyTrajectory(Thread):
                 print("Invalid id")
 
         curve = self._generate_trajectory_curve()
-        self.next_pos = next()
-        
+        self.next_pos = next(curve)
+
         while not self._is_at_lz():
             data = self.camera_con.recv_json()
             if data['id'] == COPTER_ID:
@@ -49,7 +46,7 @@ class CrazyTrajectory(Thread):
                 continue
             if self._is_at_pos(self.copter_pos, self.next_pos):
                 self.next_pos = curve.next()
-                self.controller_con.send_json({'set-points' : self.next_pos})
+                self.controller_con.send_json({'set-points': self.next_pos})
 
     def _generate_trajectory_curve(self):
         """
@@ -61,14 +58,14 @@ class CrazyTrajectory(Thread):
                'y': (start['y'] + end['y'])/2,
                'z': max(start['z'], end['z']) + HEIGHT}
 
-        x = [start[x], mid[x], end[x]]
-        y = [start[y], mid[y], end[y]]
-        z = [start[z], mid[z], end[z]]
+        x = [start['x'], mid['x'], end['x']]
+        y = [start['y'], mid['y'], end['y']]
+        z = [start['z'], mid['z'], end['z']]
 
-        (tck, u) = interpolate.splprep([x,y,z], k=2) 
-        t = linspace(0,1,SET_POINTS)
+        (tck, u) = interpolate.splprep([x, y, z], k=2)
+        t = linspace(0, 1, SET_POINTS)
         points = interpolate.splev(t, tck)
-        
+
         for i in range(SET_POINTS):
             x = points[0][i]
             y = points[1][i]
@@ -85,12 +82,12 @@ class CrazyTrajectory(Thread):
         return {'x': 0, 'y': 0, 'z': 0}
 
     def _is_at_pos(self, p1, p2):
-        return  (self._aboutEquals(p1['x'], p2['x']) and
+        return (self._aboutEquals(p1['x'], p2['x']) and
                 self._aboutEquals(p1['y'], p2['y']) and
                 self._aboutEquals(p1['z'], p2['z']))
-    
+
     def _is_at_lz(self):
-        return  self._is_at_pos(self.copter_pos, self.lz_pos)
+        return self._is_at_pos(self.copter_pos, self.lz_pos)
 
 trajectory = CrazyTrajectory()
 trajectory.start()
