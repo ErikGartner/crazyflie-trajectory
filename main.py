@@ -75,12 +75,6 @@ class CrazyTrajectory(Thread):
     def _aboutEquals(self, a, b):
         return abs(a - b) < ABOUT_TRHESHOLD
 
-    def _get_target_pos(self, msg):
-        return {'x': 0, 'y': 0, 'z': 0}
-
-    def _get_current_pos(self, msg):
-        return {'x': 0, 'y': 0, 'z': 0}
-
     def _is_at_pos(self, p1, p2):
         return (self._aboutEquals(p1['x'], p2['x']) and
                 self._aboutEquals(p1['y'], p2['y']) and
@@ -88,6 +82,9 @@ class CrazyTrajectory(Thread):
 
     def _is_at_lz(self):
         return self._is_at_pos(self.copter_pos, self.lz_pos)
+
+    def stop(self):
+        self.running = False
 
 trajectory = CrazyTrajectory()
 trajectory.start()

@@ -13,3 +13,7 @@ Below is the Mac guide.
 2. Install libzmq: ```brew install libzmq```
 3. Install dependencies using pip: ```python3 setup.py --develop```
 
+## Tests
+Unit tests exists in *test/*. Run them using *nose* using the command:
+```nosetest```
+in the root directory.
