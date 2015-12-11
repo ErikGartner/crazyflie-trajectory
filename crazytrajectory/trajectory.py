@@ -3,8 +3,8 @@ from threading import Thread
 from scipy import interpolate
 from numpy import linspace
 
-COPTER_ID = 1
-LZ_ID = 2
+COPTER_ID = 0
+LZ_ID = 1
 ABOUT_TRHESHOLD = 0.1
 HEIGHT = 0.5
 SET_POINTS = 10
@@ -30,9 +30,9 @@ class CrazyTrajectory(Thread):
             if 'id' not in data:
                 print('Data is missing "id": %s' % data)
             elif data['id'] == COPTER_ID:
-                self.copter_pos = data
+                self.copter_pos = self._format_data(data)
             elif data['id'] == LZ_ID:
-                self.lz_pos = data
+                self.lz_pos = self._format_data(data)
             else:
                 print('Invalid id')
 
@@ -42,7 +42,7 @@ class CrazyTrajectory(Thread):
         while not self._is_at_lz():
             data = self.camera_con.recv_json()
             if data['id'] == COPTER_ID:
-                self.copter_pos = data
+                self.copter_pos = self._format_data(data)
             else:
                 continue
             if self._is_at_pos(self.copter_pos, self.next_pos):
@@ -86,5 +86,11 @@ class CrazyTrajectory(Thread):
     def _is_at_lz(self):
         return self._is_at_pos(self.copter_pos, self.lz_pos)
 
-    def stop(self):
-        self.running = False
+    def _format_data(self, data):
+        return {
+            'id': data['id'],
+            'x': data['pos'][0],
+            'y': data['pos'][1],
+            'z': data['pos'][2],
+            'angle': data['angle']
+        }

@@ -68,8 +68,8 @@ class TestCrazyTrajectory(unittest.TestCase):
         self.trajectory.start()
 
         # send start position and and position
-        self.mock_camera.send_json(copter)
-        self.mock_camera.send_json(lz)
+        self.mock_camera.send_json(self._prepare_packet(copter))
+        self.mock_camera.send_json(self._prepare_packet(lz))
 
         time.sleep(1)
 
@@ -81,7 +81,7 @@ class TestCrazyTrajectory(unittest.TestCase):
         expected = next(mock_curve)
 
         # send position again to start trajectory guidance
-        self.mock_camera.send_json(copter)
+        self.mock_camera.send_json(self._prepare_packet(copter))
 
         for i in range(SET_POINTS - 1):
             # update expected set-point
@@ -97,7 +97,14 @@ class TestCrazyTrajectory(unittest.TestCase):
             self.assertAlmostEqual(step['z'], expected['z'])
 
             # send "reached set-point"
-            self.mock_camera.send_json(expected)
+            self.mock_camera.send_json(self._prepare_packet(expected))
+
+    def _prepare_packet(self, data):
+        return {
+            'pos': [data['x'], data['y'], data['z']],
+            'id': data['id'],
+            'angle': 0
+        }
 
 if __name__ == '__main__':
     unittest.main()
