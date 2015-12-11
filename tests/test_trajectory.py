@@ -1,22 +1,27 @@
 import unittest
 import zmq
+import time
 
-from crazytrajectory.trajectory import CrazyTrajectory
+from crazytrajectory.trajectory import *
 
 
 class TestCrazyTrajectory(unittest.TestCase):
 
     def setUp(self):
-        context = zmq.Context()
+        self.context = context = zmq.Context()
+        self.trajectory = CrazyTrajectory()
         self.mock_camera = context.socket(zmq.PUSH)
         self.mock_controller = context.socket(zmq.PULL)
-        self.mock_camera.connect('tcp://127.0.0.1:7777')
+        self.mock_camera.bind('tcp://127.0.0.1:7777')
         self.mock_controller.connect('tcp://127.0.0.1:5124')
-        self.trajectory = CrazyTrajectory()
 
     def tearDown(self):
         self.mock_camera.close()
         self.mock_controller.close()
+        self.context.term()
+        self.trajectory.camera_con.close()
+        self.trajectory.controller_con.close()
+        self.trajectory.context.term()
 
     def testAboutEquals(self):
         self.assertTrue(self.trajectory._aboutEquals(0, 0))
@@ -57,15 +62,42 @@ class TestCrazyTrajectory(unittest.TestCase):
         self.assertDictEqual(actual_step, step, 'Incorrect trajectory step')
 
     def testRun(self):
-        """
-        self.trajectory.start()
-
         copter = {'id': COPTER_ID, 'x': 0, 'y': 0, 'z': 0}
         lz = {'id': LZ_ID, 'x': 1, 'y': 10, 'z': 0}
 
+        self.trajectory.start()
+
+        # send start position and and position
         self.mock_camera.send_json(copter)
         self.mock_camera.send_json(lz)
 
-        step = self.mock_controller.recv_json()
-        self.assertDictEqual(copter, step, 'Incorrect trajectory step')
-        """
+        time.sleep(1)
+
+        # we're not testing curve generation, use the same function to generate
+        # an identical curve
+        mock_curve = self.trajectory._generate_trajectory_curve()
+
+        # get the mock curve "in sync" with real
+        expected = next(mock_curve)
+
+        # send position again to start trajectory guidance
+        self.mock_camera.send_json(copter)
+
+        for i in range(SET_POINTS - 1):
+            # update expected set-point
+            expected = next(mock_curve)
+            expected['id'] = COPTER_ID
+
+            # get set-point
+            step = self.mock_controller.recv_json()['set-points']
+
+            # assert it is on the curve
+            self.assertAlmostEqual(step['x'], expected['x'])
+            self.assertAlmostEqual(step['y'], expected['y'])
+            self.assertAlmostEqual(step['z'], expected['z'])
+
+            # send "reached set-point"
+            self.mock_camera.send_json(expected)
+
+if __name__ == '__main__':
+    unittest.main()

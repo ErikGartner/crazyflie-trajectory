@@ -15,24 +15,26 @@ class CrazyTrajectory(Thread):
     def __init__(self):
         Thread.__init__(self)
 
-        context = zmq.Context()
+        self.context = context = zmq.Context()
         self.camera_con = context.socket(zmq.PULL)
         self.camera_con.connect('tcp://127.0.0.1:7777')
 
         self.controller_con = context.socket(zmq.PUSH)
-        self.controller_con.connect('tcp://127.0.0.1:5124')
+        self.controller_con.bind('tcp://*:5124')
         self.copter_pos = None
         self.lz_pos = None
 
     def run(self):
-        while not self.copter_pos and not self.lz_pos:
+        while not self.copter_pos or not self.lz_pos:
             data = self.camera_con.recv_json()
-            if data['id'] == COPTER_ID:
+            if 'id' not in data:
+                print('Data is missing "id": %s' % data)
+            elif data['id'] == COPTER_ID:
                 self.copter_pos = data
             elif data['id'] == LZ_ID:
                 self.lz_pos = data
             else:
-                print("Invalid id")
+                print('Invalid id')
 
         curve = self._generate_trajectory_curve()
         self.next_pos = next(curve)
@@ -44,8 +46,10 @@ class CrazyTrajectory(Thread):
             else:
                 continue
             if self._is_at_pos(self.copter_pos, self.next_pos):
-                self.next_pos = curve.next()
+                self.next_pos = next(curve, self.lz_pos)
                 self.controller_con.send_json({'set-points': self.next_pos})
+
+        print('Trajectory completed!')
 
     def _generate_trajectory_curve(self):
         """
