@@ -10,10 +10,10 @@ setup(
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # https://packaging.python.org/en/latest/development.html#single-sourcing-the-version
-    version='0.3.0',
+    version='0.3.1',
 
-    description='',
-    long_description='',
+    description='Trajectory generation for the CrazyFlie.',
+    long_description='A trajectory generator that connects to the CrazyFlie AR solution by Bitcraze using zmq to get postion and issue set-point commands.',
 
     # The project's main homepage.
     url='https://github.com/ErikGartner/crazyflie-trajectory',

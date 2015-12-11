@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 import zmq
 from threading import Thread
 from scipy import interpolate
@@ -85,7 +84,3 @@ class CrazyTrajectory(Thread):
 
     def stop(self):
         self.running = False
-
-if __name__ == '__main__':
-    trajectory = CrazyTrajectory()
-    trajectory.start()
