@@ -12,7 +12,7 @@ SET_POINTS = 10
 
 class CrazyTrajectory(Thread):
 
-    def __init__(self):
+    def __init__(self, plotter=None):
         Thread.__init__(self)
 
         self.context = context = zmq.Context()
@@ -23,6 +23,7 @@ class CrazyTrajectory(Thread):
         self.controller_con.bind('tcp://*:5124')
         self.copter_pos = None
         self.lz_pos = None
+        self.plotter = plotter
 
     def run(self):
         while not self.copter_pos or not self.lz_pos:
@@ -35,6 +36,9 @@ class CrazyTrajectory(Thread):
                 self.lz_pos = self._format_data(data)
             else:
                 print('Invalid id')
+
+        if self.plotter:
+            self.plotter.set_endpoints(self.copter_pos, self.lz_pos)
 
         curve = self._generate_trajectory_curve()
         self.next_pos = next(curve)

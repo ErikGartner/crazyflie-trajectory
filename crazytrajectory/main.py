@@ -1,6 +1,8 @@
 from .trajectory import CrazyTrajectory
+from .plotter import TrajectoryPlotter
 
 
 def start():
-    ct = CrazyTrajectory()
+    tp = TrajectoryPlotter()
+    ct = CrazyTrajectory(tp)
     ct.start()
