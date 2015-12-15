@@ -6,3 +6,5 @@ def start():
     tp = TrajectoryPlotter()
     ct = CrazyTrajectory(tp)
     ct.start()
+    while True:
+        tp.update()

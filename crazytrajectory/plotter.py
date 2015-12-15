@@ -19,7 +19,7 @@ class TrajectoryPlotter():
         self.ax.set_ylabel('Y axis')
         self.ax.set_zlabel('Z axis')
         plt.suptitle('CrazyTrajectory')
-        self.ax.set_zlim3d(0, 10)
+        self.ax.set_zlim3d(-10, 0)
 
         plt.draw()
         plt.pause(0.001)
@@ -30,17 +30,21 @@ class TrajectoryPlotter():
         self.ax.text(start['x'], start['y'], start['z'], 'Start position')
         self.ax.scatter(end['x'], end['y'], end['z'], color='g', marker='x')
         self.ax.text(end['x'], end['y'], end['z'], 'Landing zone')
-        plt.draw()
-        plt.pause(0.001)
-
 
     def add_trajectory(self, points):
-        self.ax.plot(points['x'], points['y'], points['z'], label='Trajectory')
-        plt.draw()
-        plt.pause(0.001)
+        x = []
+        y = []
+        z = []
+        for p in points:
+            x.append(p['x'])
+            y.append(p['y'])
+            z.append(p['z'])
+        self.ax.plot(x, y, zs=z, label='Trajectory')
 
     def add_copter_point(self, point):
         self.ax.scatter(point['x'], point['y'], point['z'], color='red',
                         marker='*', label='Crazyflie')
+                        
+    def update(self):
         plt.draw()
-        plt.pause(0.001)
+        plt.pause(0.5)

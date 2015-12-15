@@ -39,6 +39,8 @@ class CrazyTrajectory(Thread):
 
         if self.plotter:
             self.plotter.set_endpoints(self.copter_pos, self.lz_pos)
+            points = list(self._generate_trajectory_curve())
+            self.plotter.add_trajectory(points)
 
         curve = self._generate_trajectory_curve()
         self.next_pos = next(curve)
@@ -47,6 +49,8 @@ class CrazyTrajectory(Thread):
             data = self.camera_con.recv_json()
             if data['id'] == COPTER_ID:
                 self.copter_pos = self._format_data(data)
+                if self.plotter:
+                    self.plotter.add_copter_point(self.copter_pos)
             else:
                 continue
             if self._is_at_pos(self.copter_pos, self.next_pos):
