@@ -3,8 +3,8 @@ from threading import Thread
 from scipy import interpolate
 from numpy import linspace
 
-COPTER_ID = 0
-LZ_ID = 1
+COPTER_ID = 1
+LZ_ID = 0
 ABOUT_TRHESHOLD = 0.1
 HEIGHT = 1
 SET_POINTS = 10
@@ -20,10 +20,11 @@ class CrazyTrajectory(Thread):
         self.camera_con.connect('tcp://127.0.0.1:7777')
 
         self.controller_con = context.socket(zmq.PUSH)
-        self.controller_con.bind('tcp://*:5124')
+        self.controller_con.connect('tcp://127.0.0.1:5124')
         self.copter_pos = None
         self.lz_pos = None
         self.plotter = plotter
+        self.last_pos = None
 
     def run(self):
         while not self.copter_pos or not self.lz_pos:
@@ -31,7 +32,7 @@ class CrazyTrajectory(Thread):
             if 'id' not in data:
                 print('Data is missing "id": %s' % data)
             elif data['id'] == COPTER_ID:
-                self.copter_pos = self._format_data(data)
+                self.last_pos = self.copter_pos = self._format_data(data)
             elif data['id'] == LZ_ID:
                 self.lz_pos = self._format_data(data)
             else:
@@ -49,13 +50,15 @@ class CrazyTrajectory(Thread):
             data = self.camera_con.recv_json()
             if data['id'] == COPTER_ID:
                 self.copter_pos = self._format_data(data)
-                if self.plotter:
+                if self.plotter and not self._is_at_pos(self.copter_pos,
+                                                        self.last_pos):
                     self.plotter.add_copter_point(self.copter_pos)
             else:
                 continue
             if self._is_at_pos(self.copter_pos, self.next_pos):
                 self.next_pos = next(curve, self.lz_pos)
                 self.controller_con.send_json({'set-points': self.next_pos})
+            self.last_pos = self.copter_pos
 
         print('Trajectory completed!')
 
