@@ -33,13 +33,16 @@ class TrajectoryPlotter():
         self.ax.text(start['x'], start['y'], start['z'], 'Start position')
         self.ax.scatter(end['x'], end['y'], end['z'], color='g', marker='x')
         self.ax.text(end['x'], end['y'], end['z'], 'Landing zone')
+        self.ax.scatter(1, 1, 1, color='g', marker='x') # this actually works
         plt.draw()
         plt.pause(0.001)
 
 
     def set_trajectory(self, points):
         print("Plotting trajectory points x:{}, y:{}, z:{}".format(points[0], points[1], points[2]))
-        plt.plot(points[0], points[1], points[2], label='Trajectory')
+        self.ax.scatter(2, 2, 2, color='g', marker='x') # this has no effect for some reason
+        # of course what we want to do is self.ax.plot(points[0], points[1], points[2], label='Trajectory')
+        # but that does not work either...
         plt.draw()
         plt.pause(0.001)
 
