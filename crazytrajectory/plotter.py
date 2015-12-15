@@ -20,6 +20,9 @@ class TrajectoryPlotter():
         self.ax.set_zlabel('Z axis')
         plt.suptitle('CrazyTrajectory')
         self.ax.set_zlim3d(0, 10)
+        self.ax.set_xlim3d(-10, 10)
+        self.ax.set_ylim3d(-10, 10)
+        plt.axis(xmin=-10, xmax=10, ymin=-10, ymax=10, zmin=0, zmax=10)
 
         plt.draw()
         plt.pause(0.001)
@@ -34,8 +37,9 @@ class TrajectoryPlotter():
         plt.pause(0.001)
 
 
-    def add_trajectory(self, points):
-        self.ax.plot(points['x'], points['y'], points['z'], label='Trajectory')
+    def add_trajectory_point(self, point):
+        print("Plotting trajectory point x:{}, y:{}, z:{}".format(point['x'], point['y'], point['z']))
+        self.ax.scatter(point['x'], point['y'], point['z'], marker='o', label='Trajectory')
         plt.draw()
         plt.pause(0.001)
 
