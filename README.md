@@ -19,4 +19,4 @@ Below is the Mac guide.
 3. Install dependencies using pip: ```python3 ./setup.py develop```
 
 ## Tests
-Unit tests exists in ```test/```. Run them using [nose](https://nose.readthedocs.org/en/latest/) using the command: ```python3 -m nose``` in the root directory.
+Unit tests exists in ```test/```. Run them using [nose](https://nose.readthedocs.org/en/latest/) using the command: ```nosetests``` in the root directory.
