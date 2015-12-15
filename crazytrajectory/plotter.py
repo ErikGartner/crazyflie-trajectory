@@ -37,9 +37,9 @@ class TrajectoryPlotter():
         plt.pause(0.001)
 
 
-    def add_trajectory_point(self, point):
-        print("Plotting trajectory point x:{}, y:{}, z:{}".format(point['x'], point['y'], point['z']))
-        self.ax.scatter(point['x'], point['y'], point['z'], marker='o', label='Trajectory')
+    def set_trajectory(self, points):
+        print("Plotting trajectory points x:{}, y:{}, z:{}".format(points[0], points[1], points[2]))
+        plt.plot(points[0], points[1], points[2], label='Trajectory')
         plt.draw()
         plt.pause(0.001)
 
