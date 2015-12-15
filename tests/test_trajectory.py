@@ -49,7 +49,7 @@ class TestCrazyTrajectory(unittest.TestCase):
             step = next(curve)
 
         # test mid point
-        actual_step = {'x': 0.5, 'y': 5, 'z': 0.5}
+        actual_step = {'x': 0.5, 'y': 5, 'z': 1}
         self.assertAlmostEqual(actual_step['x'], step['x'], delta=0.2)
         self.assertAlmostEqual(actual_step['y'], step['y'], delta=1)
         self.assertAlmostEqual(actual_step['z'], step['z'], delta=0.2)

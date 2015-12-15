@@ -6,7 +6,7 @@ from numpy import linspace
 COPTER_ID = 0
 LZ_ID = 1
 ABOUT_TRHESHOLD = 0.1
-HEIGHT = 0.5
+HEIGHT = 1
 SET_POINTS = 10
 
 
