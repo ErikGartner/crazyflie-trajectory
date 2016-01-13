@@ -11,6 +11,19 @@ A trajectory generator that connects to the CrazyFlie AR solution by Bitcraze us
 ./crazytrajectory.py
 ```
 
+## Setup
+To use the crazytrajectory you need to setup the Bitcraze control loop. A detailed guide can be found [here](https://wiki.bitcraze.io/doc:crazyflie:vision:setup?s[]=vision).
+
+In short:
+
+1. Setup client: https://github.com/bitcraze/crazyflie-clients-python
+2. Setup controller & checkout webcam-ar branch: https://github.com/bitcraze/crazyflie-vision
+3. Setup AR detector: https://github.com/AxelTLarsson/crazyflie-ar-detector
+4. Setup the crazytrajectory, see installation below.
+5. Print aruco markers as described in ar-detector repo.
+6. Configure ZMQ ports.
+7. Run all components as described in respective READMEs.
+
 ## Installation
 Below is the Mac guide.
 
