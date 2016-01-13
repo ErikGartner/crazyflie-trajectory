@@ -30,7 +30,7 @@ In short:
 Below is the Mac guide.
 
 1. Install python3: ```brew install python3```
-2. Install libzmq: ```brew install libzmq```
+2. Install libzmq: ```brew install zmq```
 3. Install dependencies using pip: ```python3 ./setup.py develop```
 
 ## Tests
