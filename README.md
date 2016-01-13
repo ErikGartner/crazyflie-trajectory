@@ -4,7 +4,9 @@
 [ ![Codeship Status for ErikGartner/crazyflie-trajectory](https://codeship.com/projects/7f48d0d0-8174-0133-e84e-7e8a3f8de088/status?branch=master)](https://codeship.com/projects/121231)
 [![Code Climate](https://codeclimate.com/github/ErikGartner/crazyflie-trajectory/badges/gpa.svg)](https://codeclimate.com/github/ErikGartner/crazyflie-trajectory)
 
-A trajectory generator that connects to the CrazyFlie AR solution by Bitcraze using zmq to get postion and issue set-point commands.
+*A trajectory generator that connects to the CrazyFlie AR solution by Bitcraze using zmq to get postion and issue set-point commands.*
+
+The crazytrajectory works by receiving position data from the AR detector and uses that to determine the start position of the crazyflie (carrying a marker) as well as the landing zone (another marker). It then generates a cubic spline curve between the two positions. It then sends set-points along that curve to the crazyflie-vision module that regulates and controls the actual crazyflie.
 
 ## Usage
 ```
