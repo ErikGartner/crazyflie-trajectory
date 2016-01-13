@@ -19,7 +19,7 @@ To use the crazytrajectory you need to setup the Bitcraze control loop. A detail
 In short:
 
 1. Setup client: https://github.com/bitcraze/crazyflie-clients-python
-2. Setup controller & checkout webcam-ar branch: https://github.com/bitcraze/crazyflie-vision
+2. Setup controller & checkout webcam-ar branch: https://github.com/ErikGartner/crazyflie-vision/tree/webcam-ar
 3. Setup AR detector: https://github.com/AxelTLarsson/crazyflie-ar-detector
 4. Setup the crazytrajectory, see installation below.
 5. Print aruco markers as described in ar-detector repo.
