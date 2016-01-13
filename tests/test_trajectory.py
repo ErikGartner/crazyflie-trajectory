@@ -1,8 +1,8 @@
 import unittest
-import zmq
+#import zmq
 import time
 
-from crazytrajectory.trajectory import *
+from crazytrajectory.trajectory import CrazyTrajectory
 
 
 class TestCrazyTrajectory(unittest.TestCase):
